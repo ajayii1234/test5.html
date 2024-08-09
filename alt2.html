@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Conversion</title>
+</head>
+<body>
+    <form>
+        <label for="numerator">Numerator:</label>
+        <input type="number" id="numerator" name="numerator" oninput="calculateFromNumerator()">
+
+        <label for="baseUnit">Base Unit:</label>
+        <select id="baseUnit" name="baseUnit" onchange="calculateFromNumerator()">
+            <option value="CTN">CTN</option>
+            <option value="PC">PC</option>
+            <option value="PALLET">PALLET</option>
+            <option value="PACK">PACK</option>
+        </select>
+
+        <label for="altUnit">Alt Unit:</label>
+        <select id="altUnit" name="altUnit" onchange="calculateFromNumerator()">
+            <option value="CTN">CTN</option>
+            <option value="PC">PC</option>
+            <option value="PALLET">PALLET</option>
+            <option value="PACK">PACK</option>
+        </select>
+
+        <label for="denominator">Denominator:</label>
+        <input type="number" id="denominator" name="denominator" oninput="calculateFromDenominator()">
+    </form>
+
+    <script>
+        const conversions = {
+            'CTN': {
+                'CTN': 1,
+                'PC': 1 / 40,
+                'PALLET': 40,
+                'PACK': 1 / 8
+            },
+            'PC': {
+                'CTN': 40,
+                'PC': 1,
+                'PALLET': 40 * 40,
+                'PACK': 40 / 8
+            },
+            'PALLET': {
+                'CTN': 1 / 40,
+                'PC': 1 / (40 * 40),
+                'PALLET': 1,
+                'PACK': 1 / (40 / 8)
+            },
+            'PACK': {
+                'CTN': 8,
+                'PC': 8 / 40,
+                'PALLET': 8 / (40 * 40),
+                'PACK': 1
+            }
+        };
+
+        function calculateFromNumerator() {
+            const numerator = parseFloat(document.getElementById('numerator').value);
+            const baseUnit = document.getElementById('baseUnit').value;
+            const altUnit = document.getElementById('altUnit').value;
+            const conversionFactor = conversions[baseUnit][altUnit];
+
+            if (!isNaN(numerator) && conversionFactor) {
+                const denominator = numerator / conversionFactor;
+                document.getElementById('denominator').value = denominator;
+            } else {
+                document.getElementById('denominator').value = '';
+            }
+        }
+
+        function calculateFromDenominator() {
+            const denominator = parseFloat(document.getElementById('denominator').value);
+            const baseUnit = document.getElementById('baseUnit').value;
+            const altUnit = document.getElementById('altUnit').value;
+            const conversionFactor = conversions[baseUnit][altUnit];
+
+            if (!isNaN(denominator) && conversionFactor) {
+                const numerator = denominator * conversionFactor;
+                document.getElementById('numerator').value = numerator;
+            } else {
+                document.getElementById('numerator').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
