@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Conversion</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        select:disabled {
+            background-color: #e9ecef; /* Greyed out background */
+            cursor: not-allowed; /* Show not-allowed cursor */
+        }
+        .delete-btn {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+     
+            <div class="form-group" style="margin-bottom: 200px;">
+                <label for="defaultUnit">Default Unit:</label>
+                <select class="form-control" id="defaultUnit" name="defaultUnit" onchange="setDefaultUnit()">
+                    <option value="CTN">CTN</option>
+                    <option value="PC">PC</option>
+                    <option value="PALLET">PALLET</option>
+                    <option value="PACK">PACK</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="numerator">Numerator:</label>
+                <input type="number" class="form-control" id="numerator" name="numerator">
+            </div>
+
+            <div class="form-group">
+                <label for="baseUnit">Base Unit:</label>
+                <select class="form-control" id="baseUnit" name="baseUnit" disabled>
+                    <option value="CTN">CTN</option>
+                    <option value="PC">PC</option>
+                    <option value="PALLET">PALLET</option>
+                    <option value="PACK">PACK</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="altUnit">Alt Unit:</label>
+                <select class="form-control" id="altUnit" name="altUnit">
+                    <option value="CTN">CTN</option>
+                    <option value="PC">PC</option>
+                    <option value="PALLET">PALLET</option>
+                    <option value="PACK">PACK</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="denominator">Denominator:</label>
+                <input type="number" class="form-control" id="denominator" name="denominator">
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="addConversion()">Add</button>
+   
+
+      
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Numerator</th>
+                        <th>Base Unit</th>
+                        <th>Denominator</th>
+                        <th>Alt Unit</th>
+                    </tr>
+                </thead>
+                <tbody id="conversionTableBody">
+                    <!-- Conversion results will be added here -->
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-success">Submit</button>
+        
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function setDefaultUnit() {
+            const defaultUnit = document.getElementById('defaultUnit').value;
+            const baseUnitSelect = document.getElementById('baseUnit');
+            baseUnitSelect.value = defaultUnit;
+            baseUnitSelect.disabled = true; // Disable the base unit dropdown
+        }
+
+        function addConversion() {
+            const numerator = document.getElementById('numerator').value;
+            const baseUnit = document.getElementById('baseUnit').value;
+            const denominator = document.getElementById('denominator').value;
+            const altUnit = document.getElementById('altUnit').value;
+
+            if (numerator && denominator) {
+                const tableBody = document.getElementById('conversionTableBody');
+                const newRow = tableBody.insertRow();
+
+                newRow.insertCell(0).innerHTML = `<span class="delete-btn" onclick="deleteRow(this)">&#x2716;</span>`;
+                newRow.insertCell(1).innerHTML = `<input type="text" class="form-control" name="numerator[]" value="${numerator}" readonly>`;
+                newRow.insertCell(2).innerHTML = `<input type="text" class="form-control" name="baseUnit[]" value="${baseUnit}" readonly>`;
+                newRow.insertCell(3).innerHTML = `<input type="text" class="form-control" name="denominator[]" value="${denominator}" readonly>`;
+                newRow.insertCell(4).innerHTML = `<input type="text" class="form-control" name="altUnit[]" value="${altUnit}" readonly>`;
+            }
+        }
+
+        function deleteRow(btn) {
+            const row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        document.addEventListener('DOMContentLoaded', setDefaultUnit);
+    </script>
+</body>
+</html>
